@@ -19,7 +19,7 @@
         <!-- <div class="m-auto border-bottom w-75 border-secondary"></div> -->
         <button id="arrow-button" class="arrow position-absolute border-0 shadow-lg d-flex align-items-center justify-content-center rounded-5"><i class="bi bi-arrow-right"></i></button>
         <div class="list-group mt-3">
-          <a href="index.html" class="menu text-decoration-none mt-4 p-1 mx-2 rounded" aria-current="true"><i class="bi bi-house-fill fs-5 mx-2"></i><span class="position-absolute">Dashboard</span></a>
+          <a href="dashboard.html" class="menu text-decoration-none mt-4 p-1 mx-2 rounded" aria-current="true"><i class="bi bi-house-fill fs-5 mx-2"></i><span class="position-absolute">Dashboard</span></a>
           <a href="manageData.html" class="menu text-decoration-none mt-4 p-1 mx-2 rounded" aria-current="true"><i class="bi bi-dropbox fs-5 mx-2"></i><span class="position-absolute">Manage Data</span></a>
           <a href="kelolaStok.html" class="menu text-decoration-none mt-4 p-1 mx-2 rounded" aria-current="true"><i class="bi bi-box-seam-fill fs-5 mx-2"></i><span class="position-absolute">Kelola Stok</span></a>
           <a href="laporan.html" class="menu text-decoration-none mt-4 p-1 mx-2 rounded" aria-current="true"><i class="bi bi-file-earmark-text-fill fs-5 mx-2"></i><span class="position-absolute">Laporan</span></a>
@@ -36,7 +36,12 @@
               <a class="navbar-brand fw-semibold" href="#">Hallo, Admin!</a>
               <p class="d-flex">May your day always be right</p>
             </div>
-            <div class="profile rounded-5 p-1 d-flex flex-row-reverse">
+            <div class="profile rounded-5 p-1 d-flex justify-content-between">
+              <input class="switch" type="checkbox" id="darkmode-toggle" />
+              <label class="checkbox-label" for="darkmode-toggle">
+                <i class="bi bi-sun-fill rounded-5"></i>
+                <i class="bi bi-moon-stars-fill rounded-5"></i>
+              </label>
               <a href="#" id="profil" class="d-flex align-items-center justify-content-center rounded-5 text-decoration-none"
                 ><i class="bi bi-person-fill fs-5 d-flex bg-white d-flex align-items-center justify-content-center rounded-end-4 rounded-start-4 text-secondary"></i
               ></a>
@@ -88,7 +93,7 @@
                         <thead>
                           <tr>
                             <th>No</th>
-                            <th>Nama Barang</th>
+                            <th>Nama Produk</th>
                             <th>Jumlah</th>
                           </tr>
                         </thead>
@@ -121,7 +126,7 @@
                         <thead>
                           <tr>
                             <th>No</th>
-                            <th>Nama Barang</th>
+                            <th>Nama Produk</th>
                             <th>Jumlah</th>
                           </tr>
                         </thead>
