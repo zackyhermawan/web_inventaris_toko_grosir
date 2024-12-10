@@ -1,0 +1,203 @@
+:root {
+  --bg-primary: #201e1e;
+  --icon: #ffffff;
+  --hover: #d9d9d9;
+  --second: #dfecf2;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.bg-primary:hover {
+  background-color: #0056b3 !important;
+}
+
+.bg-danger:hover {
+  background-color: #c82333 !important;
+}
+
+.main {
+  height: 100vh;
+}
+
+/*aside */
+aside {
+  background-color: var(--bg-primary);
+  height: 100vh;
+  top: 0;
+  left: 0;
+  width: 210px;
+  transition: 0.3s;
+  z-index: 1;
+}
+
+/* Hide */
+aside.hide {
+  width: 65px;
+}
+
+aside.hide #arrow-button {
+  right: -22%;
+}
+
+#arrow-button {
+  color: var(--bg-primary);
+  background-color: var(--hover);
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  right: -7%;
+  transition: 0.3s;
+  z-index: 1;
+}
+
+/* aside.hide a.menu {
+  display: flex;
+  align-items: center;
+} */
+
+aside.hide a.logout {
+  right: 0;
+  left: 0;
+}
+
+aside.hide a.menu span {
+  display: none;
+}
+
+aside.hide a.logout span {
+  display: none;
+}
+
+a.menu {
+  color: var(--icon) !important;
+  transition: 0.3s;
+}
+
+a.logout {
+  transition: 0.3s;
+}
+
+a.menu:hover {
+  color: var(--bg-primary) !important;
+  background-color: var(--hover);
+}
+
+a.logout {
+  bottom: 3%;
+}
+/* End Hide */
+/* End Aside */
+
+/* Content */
+.content {
+  position: relative;
+  overflow-y: auto;
+  width: 100%;
+  height: 100vh;
+}
+/* End Content */
+
+/* Navbar */
+.popup {
+  top: 100%;
+  right: 0;
+  width: 250px;
+  display: none;
+  background-color: var(--second) !important;
+  z-index: 1;
+  transition: max-height 0.3s;
+}
+
+.profile {
+  width: 70px;
+  background-color: var(--second);
+}
+
+.profile i {
+  width: 30px;
+  height: 30px;
+}
+
+.user-info {
+  flex-direction: column;
+}
+
+.open-profil {
+  display: block;
+}
+
+.header p {
+  font-size: 10px;
+}
+/* End Navbar */
+
+/* Main Content */
+.main-content {
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+
+.info-stok {
+  flex-wrap: wrap;
+}
+
+.cards {
+  background-color: var(--second) !important;
+}
+
+.table > :not(caption) > * > * {
+  background-color: transparent !important;
+}
+/* End Main Content */
+
+/* Kelola Produk */
+
+/* End Kelola Produk */
+
+/* Login */
+form.login {
+  background-color: #f8fafc !important;
+}
+
+.form-check-input:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+/* End Login */
+
+@media (max-width: 768px) {
+  aside {
+    width: 65px;
+  }
+
+  aside.hide {
+    width: 210px;
+  }
+
+  aside a.menu span {
+    display: none;
+  }
+
+  aside a.logout span {
+    display: none;
+  }
+
+  aside.hide a.menu span {
+    display: inline-block;
+  }
+
+  aside.hide a.logout span {
+    display: inline-block;
+  }
+
+  .cards {
+    width: 100% !important;
+  }
+
+  .data-stok {
+    flex-direction: column;
+  }
+}
