@@ -5,6 +5,7 @@ const popup = document.getElementById("popup");
 
 arrow.addEventListener("click", function () {
   sidebar.classList.toggle("hide");
+  arrow.classList.toggle("rotate-180");
 });
 
 profil.addEventListener("click", function () {
