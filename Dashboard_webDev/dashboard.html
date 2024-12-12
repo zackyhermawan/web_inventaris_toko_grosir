@@ -1,3 +1,8 @@
+<?php
+include "database/database.php";
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -12,18 +17,20 @@
   </head>
   <body>
     <div class="d-flex main">
-      <aside id="sidebar" class="sidebar position-relative pt-2 rounded-end-4">
+      <aside id="sidebar" class="sidebar pt-2 ">
         <div class="d-flex align-items-center justify-content-center">
-          <span class="d-flex align-items-center justify-content-center my-3" style="color: var(--icon)">Logo</span>
+          <span class="logo d-flex align-items-center justify-content-center my-3" style="color: var(--icon)">Logo</span>
         </div>
-        <!-- <div class="m-auto border-bottom w-75 border-secondary"></div> -->
-        <button id="arrow-button" class="arrow position-absolute border-0 shadow-lg d-flex align-items-center justify-content-center rounded-5"><i class="bi bi-arrow-right"></i></button>
+        <div class="position-relative">
+          <button id="arrow-button" class="arrow position-absolute border-0 shadow-lg d-flex align-items-center justify-content-center rounded-5"><i class="bi bi-arrow-right"></i></button>
+        </div>
         <div class="list-group mt-3">
-          <a href="dashboard.html" class="menu text-decoration-none mt-4 p-1 mx-2 rounded" aria-current="true"><i class="bi bi-house-fill fs-5 mx-2"></i><span class="position-absolute">Dashboard</span></a>
-          <a href="manageData.html" class="menu text-decoration-none mt-4 p-1 mx-2 rounded" aria-current="true"><i class="bi bi-dropbox fs-5 mx-2"></i><span class="position-absolute">Manage Data</span></a>
-          <a href="kelolaStok.html" class="menu text-decoration-none mt-4 p-1 mx-2 rounded" aria-current="true"><i class="bi bi-box-seam-fill fs-5 mx-2"></i><span class="position-absolute">Kelola Stok</span></a>
-          <a href="laporan.html" class="menu text-decoration-none mt-4 p-1 mx-2 rounded" aria-current="true"><i class="bi bi-file-earmark-text-fill fs-5 mx-2"></i><span class="position-absolute">Laporan</span></a>
-          <a href="logout.html" class="logout d-flex align-items-center text-decoration-none text-danger position-absolute mt-4 p-1 mx-2" aria-current="true"
+        <a href="" class="close-btn p-1"><i class="bi bi-x-lg text-white fs-5 mx-2"></i></a>
+          <a href="dashboard.php" class="menu position-relative text-decoration-none mt-4 p-1 mx-2 rounded" aria-current="true"><i class="bi bi-house-fill fs-5 mx-2"></i><span class="position-absolute">Dashboard</span></a>
+          <a href="manageData.php" class="menu text-decoration-none mt-4 p-1 mx-2 rounded" aria-current="true"><i class="bi bi-dropbox fs-5 mx-2"></i><span class="position-absolute">Manage Data</span></a>
+          <a href="kelolaStok.php" class="menu text-decoration-none mt-4 p-1 mx-2 rounded" aria-current="true"><i class="bi bi-box-seam-fill fs-5 mx-2"></i><span class="position-absolute">Kelola Stok</span></a>
+          <a href="laporan.php" class="menu text-decoration-none mt-4 p-1 mx-2 rounded" aria-current="true"><i class="bi bi-file-earmark-text-fill fs-5 mx-2"></i><span class="position-absolute">Laporan</span></a>
+          <a href="logout.php" class="logout d-flex align-items-center text-decoration-none text-danger position-absolute mt-4 p-1 mx-2" aria-current="true"
             ><i class="bi bi-box-arrow-in-left fs-5 mx-2"></i><span class="=position-absolute">Logout</span></a
           >
         </div>
@@ -32,18 +39,21 @@
       <div class="content container-fluid">
         <nav class="navbar px-4 navbar-expand-lg">
           <div class="container-fluid position-relative d-flex align-items-center">
-            <div class="header">
-              <a class="navbar-brand fw-semibold" href="#">Hallo, Admin!</a>
-              <p class="d-flex">May your day always be right</p>
+            <div class="header d-flex align-items-center ">
+              <i id="hamburger-menu" class="bi bi-list mx-2" style="font-size: 2rem"></i>
+              <div class="header-nav">
+                <a class="navbar-brand fw-semibold" href="#">Hallo, Admin!</a>
+                <p class="d-flex m-0">May your day always be right</p>
+              </div>
             </div>
             <div class="profile rounded-5 p-1 d-flex justify-content-between">
               <input class="switch" type="checkbox" id="darkmode-toggle" />
               <label class="checkbox-label" for="darkmode-toggle">
-                <i class="bi bi-sun-fill rounded-5"></i>
-                <i class="bi bi-moon-stars-fill rounded-5"></i>
+                <i class="bi bi-sun-fill"></i>
+                <i class="bi bi-moon-stars-fill"></i>
               </label>
-              <a href="#" id="profil" class="d-flex align-items-center justify-content-center rounded-5 text-decoration-none"
-                ><i class="bi bi-person-fill fs-5 d-flex bg-white d-flex align-items-center justify-content-center rounded-end-4 rounded-start-4 text-secondary"></i
+              <a href="#" id="profil" class="d-flex align-items-center justify-content-center text-decoration-none"
+                ><i class="bi bi-person-fill fs-5 d-flex bg-white d-flex align-items-center justify-content-center rounded-5 text-secondary"></i
               ></a>
             </div>
 
@@ -53,7 +63,10 @@
                   <img src="asset/user.png" class="w-50 mb-3" alt="" />
                   <h2>Budi</h2>
                 </div>
-                <div class="m-auto border-bottom border-1 border-black border-dark-subtle w-75"></div>
+                <div class="m-auto border-bottom border-1 border-black border-dark-subtle"></div>
+                <div class="user d-flex align-items-center justify-content-center my-2">
+                  <span class="fs-4 ">Admin</span>
+                </div>
               </div>
             </div>
           </div>
