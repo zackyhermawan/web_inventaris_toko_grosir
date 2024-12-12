@@ -1,3 +1,44 @@
+<?php
+include 'database/database.php';
+session_start();
+
+
+// ADD DATA
+$addMessage = "";
+if (isset($_POST['submit'])) {
+  $namaProduk = $_POST['nama_produk'];
+  $kategori = $_POST['kategori'];
+  $stokAwal = $_POST['stok_awal'];
+  $hargaBeli = $_POST['harga_beli'];
+  $hargaJual = $_POST['harga_jual'];
+
+  $sql_produk = "INSERT INTO produk (nama_produk, kategori, stok, harga_beli, harga_jual)
+  VALUES ('$namaProduk', '$kategori', '$stokAwal', '$hargaBeli', '$hargaJual')";
+  
+  if (mysqli_query($db, $sql_produk)) {
+    $id_produk = mysqli_insert_id($db);
+    $tanggal = date("d-m-y");
+    $keterangan = "masuk";
+    $laba = $stokAwal * ($hargaJual - $hargaBeli);
+
+    $sql_stock = "INSERT INTO stok_produk (id_produk, tanggal, keterangan, laba)
+    VALUES ('$id_produk', '$tanggal', '$keterangan', '$laba')";
+    if (mysqli_query($db, $sql_stock)) {
+      $addMessage = "Data berhasil ditambahkan";
+    }
+  }
+}
+
+// READ DATA
+$sql_read_data = "SELECT * FROM produk";
+$result_read_data = mysqli_query($db, $sql_read_data);
+
+// Menampilkan nama produk fitur delete
+
+
+// Hapus DATA
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -10,18 +51,20 @@
   </head>
   <body>
     <div class="d-flex main">
-      <aside id="sidebar" class="sidebar position-relative pt-2 rounded-end-4">
+      <aside id="sidebar" class="sidebar pt-2">
         <div class="d-flex align-items-center justify-content-center">
-          <span class="d-flex align-items-center justify-content-center my-3" style="color: var(--icon)">Logo</span>
+          <span class="d-flex logo align-items-center justify-content-center my-3" style="color: var(--icon)">Logo</span>
         </div>
-        <!-- <div class="m-auto border-bottom w-75 border-secondary"></div> -->
-        <button id="arrow-button" class="arrow position-absolute border-0 shadow-lg d-flex align-items-center justify-content-center rounded-5"><i class="bi bi-arrow-right"></i></button>
+        <div class="position-relative">
+          <button id="arrow-button" class="arrow position-absolute border-0 shadow-lg d-flex align-items-center justify-content-center rounded-5"><i class="bi bi-arrow-right"></i></button>
+        </div>
         <div class="list-group mt-3">
-          <a href="dashboard.html" class="menu text-decoration-none mt-4 p-1 mx-2 rounded" aria-current="true"><i class="bi bi-house-fill fs-5 mx-2"></i><span class="position-absolute">Dashboard</span></a>
-          <a href="manageData.html" class="menu text-decoration-none mt-4 p-1 mx-2 rounded" aria-current="true"><i class="bi bi-dropbox fs-5 mx-2"></i><span class="position-absolute">Manage Data</span></a>
-          <a href="kelolaStok.html" class="menu text-decoration-none mt-4 p-1 mx-2 rounded" aria-current="true"><i class="bi bi-box-seam-fill fs-5 mx-2"></i><span class="position-absolute">Kelola Stok</span></a>
-          <a href="laporan.html" class="menu text-decoration-none mt-4 p-1 mx-2 rounded" aria-current="true"><i class="bi bi-file-earmark-text-fill fs-5 mx-2"></i><span class="position-absolute">Laporan</span></a>
-          <a href="logout.html" class="logout d-flex align-items-center text-decoration-none text-danger position-absolute mt-4 p-1 mx-2" aria-current="true"
+        <a href="" class="close-btn p-1"><i class="bi bi-x-lg text-white fs-5 mx-2"></i></a>
+          <a href="dashboard.php" class="menu text-decoration-none mt-4 p-1 mx-2 rounded" aria-current="true"><i class="bi bi-house-fill fs-5 mx-2"></i><span class="position-absolute">Dashboard</span></a>
+          <a href="manageData.php" class="menu text-decoration-none mt-4 p-1 mx-2 rounded" aria-current="true"><i class="bi bi-dropbox fs-5 mx-2"></i><span class="position-absolute">Manage Data</span></a>
+          <a href="kelolaStok.php" class="menu text-decoration-none mt-4 p-1 mx-2 rounded" aria-current="true"><i class="bi bi-box-seam-fill fs-5 mx-2"></i><span class="position-absolute">Kelola Stok</span></a>
+          <a href="laporan.php" class="menu text-decoration-none mt-4 p-1 mx-2 rounded" aria-current="true"><i class="bi bi-file-earmark-text-fill fs-5 mx-2"></i><span class="position-absolute">Laporan</span></a>
+          <a href="logout.php" class="logout d-flex align-items-center text-decoration-none text-danger position-absolute mt-4 p-1 mx-2" aria-current="true"
             ><i class="bi bi-box-arrow-in-left fs-5 mx-2"></i><span class="=position-absolute">Logout</span></a
           >
         </div>
@@ -30,18 +73,21 @@
       <div class="content container-fluid">
         <nav class="navbar px-4 navbar-expand-lg">
           <div class="container-fluid position-relative d-flex align-items-center">
-            <div class="header">
-              <a class="navbar-brand fw-semibold" href="#">Hallo, Admin!</a>
-              <p class="d-flex">May your day always be right</p>
+          <div class="header d-flex align-items-center ">
+              <i id="hamburger-menu" class="bi bi-list mx-2" style="font-size: 2rem"></i>
+              <div class="header-nav">
+                <a class="navbar-brand fw-semibold" href="#">Hallo, Admin!</a>
+                <p class="d-flex m-0">May your day always be right</p>
+              </div>
             </div>
             <div class="profile rounded-5 p-1 d-flex justify-content-between">
               <input class="switch" type="checkbox" id="darkmode-toggle" />
               <label class="checkbox-label" for="darkmode-toggle">
-                <i class="bi bi-sun-fill rounded-5"></i>
-                <i class="bi bi-moon-stars-fill rounded-5"></i>
+                <i class="bi bi-sun-fill"></i>
+                <i class="bi bi-moon-stars-fill"></i>
               </label>
-              <a href="#" id="profil" class="d-flex align-items-center justify-content-center rounded-5 text-decoration-none"
-                ><i class="bi bi-person-fill fs-5 d-flex bg-white d-flex align-items-center justify-content-center rounded-end-4 rounded-start-4 text-secondary"></i
+              <a href="#" id="profil" class="d-flex align-items-center justify-content-center text-decoration-none"
+                ><i class="bi bi-person-fill fs-5 d-flex bg-white d-flex align-items-center justify-content-center rounded-5 text-secondary"></i
               ></a>
             </div>
 
@@ -62,133 +108,56 @@
             <h2 class="mb-3">Kelola Produk</h2>
             <div class="flex-wrap container-fluid">
               <div class="data-stok row">
-                <div class="card cards shadow-sm border-0 col-md-12">
+                <div class="card  cards shadow-sm border-0 col-md-12">
                   <div class="card-body">
                     <h5 class="card-title m-0">Data Produk</h5>
-                    <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal" class="d-inline-block text-decoration-none p-2 bg-primary text-white rounded my-3" style="font-size: 14px">Add Data</a>
-                    <table class="table table-bordered border-secondary">
-                      <thead>
-                        <tr>
-                          <th>No</th>
-                          <th>Nama Produk</th>
-                          <th>Kategori</th>
-                          <th>Stok Awal</th>
-                          <th>Harga Beli</th>
-                          <th>Harga Jual</th>
-                          <th>Aksi</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <th>1</th>
-                          <td>Mark</td>
-                          <td>Otto</td>
-                          <td>Otto</td>
-                          <td>Otto</td>
-                          <td>Otto</td>
-                          <td>
-                            <div class="d-flex gap-2">
-                              <a href="" data-bs-toggle="modal" data-bs-target="#edit" class="fs-5 text-white d-flex align-items-center justify-content-center bg-primary rounded" style="width: 30px; height: 30px"
-                                ><i class="bi bi-pencil-square"></i
-                              ></a>
-                              <a href="" data-bs-toggle="modal" data-bs-target="#delete" class="fs-5 text-white d-flex align-items-center justify-content-center bg-danger rounded" style="width: 30px; height: 30px"
-                                ><i class="bi bi-trash"></i
-                              ></a>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th>1</th>
-                          <td>Mark</td>
-                          <td>Otto</td>
-                          <td>Otto</td>
-                          <td>Otto</td>
-                          <td>Otto</td>
-                          <td>
-                            <div class="d-flex gap-2">
-                              <a href="" data-bs-toggle="modal" data-bs-target="#edit" class="fs-5 text-white d-flex align-items-center justify-content-center bg-primary rounded" style="width: 30px; height: 30px"
-                                ><i class="bi bi-pencil-square"></i
-                              ></a>
-                              <a href="" data-bs-toggle="modal" data-bs-target="#delete" class="fs-5 text-white d-flex align-items-center justify-content-center bg-danger rounded" style="width: 30px; height: 30px"
-                                ><i class="bi bi-trash"></i
-                              ></a>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th>1</th>
-                          <td>Mark</td>
-                          <td>Otto</td>
-                          <td>Otto</td>
-                          <td>Otto</td>
-                          <td>Otto</td>
-                          <td>
-                            <div class="d-flex gap-2">
-                              <a href="" data-bs-toggle="modal" data-bs-target="#edit" class="fs-5 text-white d-flex align-items-center justify-content-center bg-primary rounded" style="width: 30px; height: 30px"
-                                ><i class="bi bi-pencil-square"></i
-                              ></a>
-                              <a href="" data-bs-toggle="modal" data-bs-target="#delete" class="fs-5 text-white d-flex align-items-center justify-content-center bg-danger rounded" style="width: 30px; height: 30px"
-                                ><i class="bi bi-trash"></i
-                              ></a>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th>1</th>
-                          <td>Mark</td>
-                          <td>Otto</td>
-                          <td>Otto</td>
-                          <td>Otto</td>
-                          <td>Otto</td>
-                          <td>
-                            <div class="d-flex gap-2">
-                              <a href="" data-bs-toggle="modal" data-bs-target="#edit" class="fs-5 text-white d-flex align-items-center justify-content-center bg-primary rounded" style="width: 30px; height: 30px"
-                                ><i class="bi bi-pencil-square"></i
-                              ></a>
-                              <a href="" data-bs-toggle="modal" data-bs-target="#delete" class="fs-5 text-white d-flex align-items-center justify-content-center bg-danger rounded" style="width: 30px; height: 30px"
-                                ><i class="bi bi-trash"></i
-                              ></a>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th>2</th>
-                          <td>Jacob</td>
-                          <td>Thornton</td>
-                          <td>Thornton</td>
-                          <td>Thornton</td>
-                          <td>Thornton</td>
-                          <td>
-                            <div class="d-flex gap-2">
-                              <a href="" data-bs-toggle="modal" data-bs-target="#edit" class="fs-5 text-white d-flex align-items-center justify-content-center bg-primary rounded" style="width: 30px; height: 30px"
-                                ><i class="bi bi-pencil-square"></i
-                              ></a>
-                              <a href="" data-bs-toggle="modal" data-bs-target="#delete" class="fs-5 text-white d-flex align-items-center justify-content-center bg-danger rounded" style="width: 30px; height: 30px"
-                                ><i class="bi bi-trash"></i
-                              ></a>
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th>3</th>
-                          <td>Larry the Bird</td>
-                          <td>Larry the Bird</td>
-                          <td>Larry the Bird</td>
-                          <td>Larry the Bird</td>
-                          <td>Larry the Bird</td>
-                          <td>
-                            <div class="d-flex gap-2">
-                              <a href="" data-bs-toggle="modal" data-bs-target="#edit" class="fs-5 text-white d-flex align-items-center justify-content-center bg-primary rounded" style="width: 30px; height: 30px"
-                                ><i class="bi bi-pencil-square"></i
-                              ></a>
-                              <a href="" data-bs-toggle="modal" data-bs-target="#delete" class="fs-5 text-white d-flex align-items-center justify-content-center bg-danger rounded" style="width: 30px; height: 30px"
-                                ><i class="bi bi-trash"></i
-                              ></a>
-                            </div>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+                    <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal" class="d-inline-block text-decoration-none p-2 bg-primary text-white rounded my-3" >Add Data</a>
+                    <p><?php echo $addMessage ?></p>
+                    <div class="overflow-x-auto">
+                      <table class="table table-bordered border-secondary px-2">
+                        <thead>
+                          <tr>
+                            <th style="width: 30px;">No</th>
+                            <th>Nama Produk</th>
+                            <th>Kategori</th>
+                            <th>Stok Awal</th>
+                            <th>Harga Beli</th>
+                            <th>Harga Jual</th>
+                            <th>Keterangan</th>
+                            <th>Aksi</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <?php
+                          if (mysqli_num_rows($result_read_data) > 0) {
+                            $no = 1;
+                            while($data = mysqli_fetch_array($result_read_data)){
+                          
+                          echo "<tr>";
+                            echo "<td>".$no++."</td>";
+                            echo "<th>".$data['nama_produk']."</th>";
+                            echo "<td>".$data['kategori']."</td>";
+                            echo "<td>".$data['stok']."</td>";
+                            echo "<td>".$data['harga_beli']."</td>";
+                            echo "<td>".$data['harga_jual']."</td>";
+                            echo "<td>Masuk</td>";
+                            echo "<td>";
+                              echo"<div class='d-flex gap-2'>";
+                                echo "<a data-bs-toggle='modal' data-bs-target='#edit' class='fs-5 text-white d-flex align-items-center justify-content-center bg-primary rounded' style='width: 30px; height: 30px'
+                                  ><i class='bi bi-pencil-square'></i
+                                ></a>";
+                                echo "<a data-bs-toggle='modal' data-bs-target='#delete' class='fs-5 text-white d-flex align-items-center justify-content-center bg-danger rounded' style='width: 30px; height: 30px'
+                                  ><i class='bi bi-trash'></i
+                                ></a>";
+                              echo "</div>";
+                            echo"</td>";
+                            }
+                          }
+                            ?>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
                     <div class="change-page d-flex gap-2 align-items-center justify-content-center">
                       <a href="" class="p-1 d-flex align-items-center justify-content-center fw-semibold bg-primary text-decoration-none text-dark rounded" style="width: 35px; height: 35px">1</a>
                       <a href="" class="p-1 d-flex align-items-center justify-content-center fw-semibold text-decoration-none text-dark rounded" style="width: 35px; height: 35px; background-color: var(--hover)">2</a>
@@ -215,9 +184,10 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form class="w-100 h-50 p-4 d-flex flex-column rounded-3 justify-content-center">
+          <!-- FORM ADD DATA -->
+          <form method="POST" class="w-100 h-50 p-4 d-flex flex-column rounded-3 justify-content-center">
             <div class="mb-3">
-              <input type="email" placeholder="Nama Produk" class="form-control" id="" aria-describedby="emailHelp" />
+              <input type="text" name="nama_produk" placeholder="Nama Produk" class="form-control" id="" aria-describedby="emailHelp" />
             </div>
             <div class="mb-3">
               <label class="form-label">Kategori</label>
@@ -235,20 +205,22 @@
               </div>
             </div>
             <div class="mb-3">
-              <input type="number" placeholder="Stok Awal" class="form-control" id="" />
+              <input type="number" name="stok_awal" placeholder="Stok Awal" class="form-control" id="" />
             </div>
             <div class="mb-3">
-              <input type="number" placeholder="Harga Beli" class="form-control" id="" />
+              <input type="number" name="harga_beli" placeholder="Harga Beli" class="form-control" id="" />
             </div>
             <div class="mb-3">
-              <input type="number" placeholder="Harga Jual" class="form-control" id="" />
+              <input type="number" name="harga_jual" placeholder="Harga Jual" class="form-control" id="" />
             </div>
-          </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Add changes</button>
+          <!-- *Button name=submit nabrak sama type=button -->
+          <button name="submit" class="btn btn-primary">Add changes</button>
         </div>
+        <!-- *PENEMPATAN FORM (gak bisa di submit jika button tidak didalam tag form) -->
+        </form>
       </div>
     </div>
   </div>
@@ -262,9 +234,9 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form class="w-100 h-50 p-4 d-flex flex-column rounded-3 justify-content-center">
+          <form method="POST" class="w-100 h-50 p-4 d-flex flex-column rounded-3 justify-content-center">
             <div class="mb-3">
-              <input type="email" placeholder="Nama Produk" class="form-control" id="" aria-describedby="emailHelp" />
+              <input type="email" name="nama_produk" placeholder="Nama Produk" class="form-control" id="" aria-describedby="emailHelp" />
             </div>
             <div class="mb-3">
               <label class="form-label">Kategori</label>
@@ -282,19 +254,22 @@
               </div>
             </div>
             <div class="mb-3">
-              <input type="number" placeholder="Stok Awal" class="form-control" id="" />
+              <input type="number" name="stok_awal" placeholder="Stok Awal" class="form-control" id="" />
             </div>
             <div class="mb-3">
-              <input type="number" placeholder="Harga Beli" class="form-control" id="" />
+              <input type="number" name="harga_beli" placeholder="Harga Beli" class="form-control" id="" />
             </div>
             <div class="mb-3">
-              <input type="number" placeholder="Harga Jual" class="form-control" id="" />
+              <input type="number" name="harga_jual" placeholder="Harga Jual" class="form-control" id="" />
             </div>
-          </form>
+          
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <!-- *name=save nabrak dengan type=button -->
+          <button name="save" class="btn btn-primary">Save changes</button>
+        <!-- *PENEMPATAN FORM (gak bisa di klik jika button tidak didalam tag form) -->  
+          </form>
         </div>
       </div>
     </div>
@@ -311,11 +286,14 @@
         <div class="modal-body">
           <form class="w-100 h-50 p-4 d-flex flex-column rounded-3 justify-content-center">
             <p class="fw-semibold">Apakah anda yakin ingin menghapus {nama produk} ini?</p>
-          </form>
+          
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-danger">Delete</button>
+          <!-- *name=delete nabrak dengan type=button -->
+          <button name='delete' class='btn btn-danger'>Delete</button>"
+          <!-- *PENEMPATAN FORM (gak bisa di klik jika button tidak didalam tag form) --> 
+        </form>
         </div>
       </div>
     </div>
