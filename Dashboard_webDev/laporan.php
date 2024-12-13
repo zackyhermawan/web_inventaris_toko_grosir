@@ -18,11 +18,20 @@
           <button id="arrow-button" class="arrow position-absolute border-0 shadow-lg d-flex align-items-center justify-content-center rounded-5"><i class="bi bi-arrow-right"></i></button>
         </div>
         <div class="list-group mt-3">
-        <a href="" class="close-btn p-1"><i class="bi bi-x-lg text-white fs-5 mx-2"></i></a>
+        <a  class="close-btn p-1"><i id="close-btn" class="bi bi-x-lg text-white fs-5 mx-2"></i></a>
           <a href="dashboard.php" class="menu text-decoration-none mt-4 p-1 mx-2 rounded" aria-current="true"><i class="bi bi-house-fill fs-5 mx-2"></i><span class="position-absolute">Dashboard</span></a>
           <a href="manageData.php" class="menu text-decoration-none mt-4 p-1 mx-2 rounded" aria-current="true"><i class="bi bi-dropbox fs-5 mx-2"></i><span class="position-absolute">Manage Data</span></a>
-          <a href="kelolaStok.php" class="menu text-decoration-none mt-4 p-1 mx-2 rounded" aria-current="true"><i class="bi bi-box-seam-fill fs-5 mx-2"></i><span class="position-absolute">Kelola Stok</span></a>
-          <a href="laporan.php" class="menu text-decoration-none mt-4 p-1 mx-2 rounded" aria-current="true"><i class="bi bi-file-earmark-text-fill fs-5 mx-2"></i><span class="position-absolute">Laporan</span></a>
+          <a class="menu nav-link position-relative text-decoration-none mt-4 p-1 mx-2 rounded text-white" data-bs-toggle="collapse" href="#kelolaProduk" role="button" aria-expanded="false" aria-controls="kelolaProduk">
+          <i class="bi bi-box-seam-fill fs-5 mx-2"></i><span class="position-absolute">Kelola Stok<i class="bi ms-2 bi-caret-down-fill"></i>
+          </span>
+          </a>
+          <div class="kelolastok-dropdown collapse" id="kelolaProduk">
+            <ul class="list-unstyled ps-3 d-flex flex-column gap-2">
+              <li class="d-flex align-items-center my-2" style="margin-left: 2rem;"><a href="barangMasuk.php" class="menu me-2 p-1 nav-link text-white rounded">Barang Masuk</a></li>
+              <li class="d-flex align-items-center" style="margin-left: 2rem;"><a href="barangKeluar.php" class="menu me-2 p-1 nav-link text-white rounded">Barang Keluar</a></li>
+            </ul>
+          </div>
+          <a href="laporan.php" class="menu laporan-aside text-decoration-none mt-4 p-1 mx-2 rounded" aria-current="true"><i class="bi bi-file-earmark-text-fill fs-5 mx-2"></i><span class="position-absolute">Laporan</span></a>
           <a href="logout.php" class="logout d-flex align-items-center text-decoration-none text-danger position-absolute mt-4 p-1 mx-2" aria-current="true"
             ><i class="bi bi-box-arrow-in-left fs-5 mx-2"></i><span class="=position-absolute">Logout</span></a
           >
@@ -35,28 +44,46 @@
           <div class="header d-flex align-items-center ">
               <i id="hamburger-menu" class="bi bi-list mx-2" style="font-size: 2rem"></i>
               <div class="header-nav">
-                <a class="navbar-brand fw-semibold" href="#">Hallo, Admin!</a>
-                <p class="d-flex m-0">May your day always be right</p>
+              <p class="fs-4 m-0 text-decoration-none fw-semibold" >Hallo, Admin!</p>
+              <p class="d-flex m-0">May your day always be right</p>
               </div>
             </div>
-            <div class="profile rounded-5 p-1 d-flex justify-content-between">
+            <div class="dropdown">
+              <button class="btn cards border-0 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi text-secondary bi-sun-fill"></i>
+              </button>
+              <ul class="dropdown-menu cards">
+                <li><a id="lightmode-mobile" class="dropdown-item text-secondary" href="#"><i class="me-2 bi bi-sun-fill"></i>light</a></li>
+                <li><a id="darkmode-mobile" class="dropdown-item text-secondary" href="#"><i class="me-2 bi bi-moon-stars-fill"></i>Dark</a></li>
+              </ul>
+            </div>
+            <div class="profile cards rounded-5 p-1 d-flex justify-content-between">
               <input class="switch" type="checkbox" id="darkmode-toggle" />
               <label class="checkbox-label" for="darkmode-toggle">
-                <i class="bi bi-sun-fill"></i>
-                <i class="bi bi-moon-stars-fill"></i>
+                <i class="sun bi bi-sun-fill"></i>
+                <i class="moon bi bi-moon-stars-fill"></i>
               </label>
               <a href="#" id="profil" class="d-flex align-items-center justify-content-center text-decoration-none"
                 ><i class="bi bi-person-fill fs-5 d-flex bg-white d-flex align-items-center justify-content-center rounded-5 text-secondary"></i
               ></a>
             </div>
 
-            <div id="popup" class="popup position-absolute rounded shadow-lg">
+            <div id="popup" class="popup cards position-absolute rounded shadow-lg">
               <div class="user-profil p-4">
                 <div class="user-info d-flex align-items-center justify-content-center">
                   <img src="asset/user.png" class="w-50 mb-3" alt="" />
                   <h2>Budi</h2>
                 </div>
-                <div class="m-auto border-bottom border-1 border-black border-dark-subtle w-75"></div>
+                <div class="m-auto border-bottom border-1 border-black border-dark-subtle"></div>
+                <div class="user d-flex align-items-center justify-content-center my-2">
+                  <span class="fs-4 ">Admin</span>
+                </div>
+                <div class="logout-profil ">
+                  <div class="m-auto border-bottom border-1 border-black border-dark-subtle"></div>
+                  <div class="user d-flex align-items-center justify-content-center my-2">
+                    <a href="logout.php" class="fs-5 text-decoration-none text-danger d-flex align-items-center"><i class="bi bi-box-arrow-in-left fs-5 mx-2"></i>Logout</a>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -104,16 +131,20 @@
               <div class="data-stok row">
                 <div class="card pt-5 cards shadow-sm border-0 col-md-12">
                   <div class="overflow-x-auto card-body">
-                    <div class="overflow-x-auto">
+                    <div class="table-responsive">
                     <table class="table border-secondary px-2">
                       <thead>
                         <tr>
                           <th style="width: 30px;">No</th>
-                          <th>Nama Barang</th>
+                          <th>Kode Produk</th>
+                          <th>Nama Produk</th>
                           <th>Kategori</th>
-                          <th>Stok Awal</th>
+                          <th>Stok</th>
+                          <th>Tanggal Masuk</th>
+                          <th>Tanggal Keluar</th>
                           <th>Barang Keluar</th>
                           <th>Barang Masuk</th>
+                          <th>Laba</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -123,6 +154,10 @@
                           <td>Pakaian</td>
                           <td>1</td>
                           <td>1</td>
+                          <td>Masuk</td>
+                          <td>Masuk</td>
+                          <td>Masuk</td>
+                          <td>Masuk</td>
                           <td>Masuk</td>
                         </tr>
                       </tbody>
