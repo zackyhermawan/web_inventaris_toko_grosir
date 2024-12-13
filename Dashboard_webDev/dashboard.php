@@ -48,25 +48,34 @@ session_start();
       <div class="content container-fluid">
         <nav class="navbar px-4 ">
           <div class="container-fluid position-relative d-flex align-items-center">
-            <div class="header d-flex align-items-center ">
+            <div class="header d-flex align-items-center">
               <i id="hamburger-menu" class="bi bi-list mx-2" style="font-size: 2rem"></i>
               <div class="header-nav">
-                <p class="fs-4 m-0 text-decoration-none fw-semibold" >Hallo, Admin!</p>
+                <p class="fs-4 m-0 fw-semibold" >Hallo, Admin!</p>
                 <p class="d-flex m-0">May your day always be right</p>
               </div>
+            </div>
+            <div class="dropdown">
+              <button class="btn cards border-0 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi text-secondary bi-sun-fill"></i>
+              </button>
+              <ul class="dropdown-menu cards">
+                <li><a id="lightmode-mobile" class="dropdown-item text-secondary" href="#"><i class="me-2 bi bi-sun-fill"></i>light</a></li>
+                <li><a id="darkmode-mobile" class="dropdown-item text-secondary" href="#"><i class="me-2 bi bi-moon-stars-fill"></i>Dark</a></li>
+              </ul>
             </div>
             <div class="profile cards rounded-5 p-1 d-flex justify-content-between">
               <input class="switch" type="checkbox" id="darkmode-toggle" />
               <label class="checkbox-label" for="darkmode-toggle">
-                <i class="bi bi-sun-fill"></i>
-                <i class="bi bi-moon-stars-fill"></i>
+                <i class="sun bi bi-sun-fill"></i>
+                <i class="moon bi bi-moon-stars-fill"></i>
               </label>
               <a href="#" id="profil" class="d-flex align-items-center justify-content-center text-decoration-none"
                 ><i class="bi bi-person-fill fs-5 d-flex bg-white d-flex align-items-center justify-content-center rounded-5 text-secondary"></i
               ></a>
             </div>
 
-            <div id="popup" class="popup position-absolute rounded shadow-lg">
+            <div id="popup" class="popup cards position-absolute rounded shadow-lg">
               <div class="user-profil p-4">
                 <div class="user-info d-flex align-items-center justify-content-center">
                   <img src="asset/user.png" class="w-50 mb-3" alt="" />
