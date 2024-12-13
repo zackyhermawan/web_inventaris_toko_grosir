@@ -5,6 +5,10 @@
   --second: #dfecf2;
 }
 
+body {
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -31,7 +35,7 @@ aside {
   height: 100vh;
   top: 0;
   left: 0;
-  width: 210px;
+  width: 230px;
   transition: 0.3s;
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
@@ -70,6 +74,42 @@ aside a {
   position: relative;
 }
 
+.dashboard-aside {
+  background-color: var(--hover);
+}
+
+.dashboard-aside span,
+.dashboard-aside i {
+  color: var(--bg-primary);
+}
+
+.managedata-aside {
+  background-color: var(--hover);
+}
+
+.managedata-aside span,
+.managedata-aside i {
+  color: var(--bg-primary);
+}
+
+.kelolastok-aside {
+  background-color: var(--hover) !important;
+}
+
+.kelolastok-aside span,
+.kelolastok-aside i {
+  color: var(--bg-primary) !important;
+}
+
+.laporan-aside {
+  background-color: var(--hover);
+}
+
+.laporan-aside span,
+.laporan-aside i {
+  color: var(--bg-primary);
+}
+
 aside a.menu span {
   left: 3rem;
   top: 8px;
@@ -91,6 +131,10 @@ aside.hide a.logout span {
 a.menu {
   color: var(--icon) !important;
   transition: 0.3s;
+}
+
+aside.hide .kelolastok-dropdown {
+  display: none !important;
 }
 
 a.logout {
@@ -132,15 +176,26 @@ i#hamburger-menu {
   display: none !important;
 }
 
+.dropdown {
+  display: none !important;
+}
+
+.dropdown-item:hover {
+  background-color: transparent !important;
+}
+
 .profile {
-  width: 150px;
-  background-color: var(--second);
+  width: 15%;
+  /* background-color: var(--second); */
 }
 
 .profile i {
   width: 30px;
   height: 30px;
-  /* padding: 0.5rem; */
+}
+
+.logout-profil {
+  display: none;
 }
 
 .header p {
@@ -154,41 +209,40 @@ label.checkbox-label {
   position: relative;
   display: block;
   border: 4px solid #000;
+  background: #ddd;
   transition: 0.3s;
   cursor: pointer;
 }
 
 label.checkbox-label:after {
   content: "";
-  width: 25px;
-  height: 25px;
+  width: 22px;
+  height: 22px;
   position: absolute;
-  top: -2px;
+  top: 0;
   left: 0;
   background: white;
-  border-radius: 25px;
+  border-radius: 50%;
   transition: 0.3s;
 }
 
-.bi-sun-fill {
-  color: white;
+.sun {
+  color: #ffcc00;
   position: absolute;
   top: 50%;
   left: 10%;
   transform: translateY(-40%);
 }
 
-.bi-moon-stars-fill {
+.moon {
   position: absolute;
   top: 50%;
-  right: -10%;
+  right: -16%;
   transform: translateY(-40%);
 }
 
 input.switch {
-  width: 0;
-  height: 0;
-  visibility: hidden;
+  display: none;
 }
 
 input.switch:checked + label.checkbox-label {
@@ -199,6 +253,41 @@ input.switch:checked + label.checkbox-label:after {
   right: 0;
   transform: translateX(36px);
   background: linear-gradient(180deg, #777, #3a3a3a);
+}
+
+input.switch:checked + label.checkbox-label + .main-content {
+  background-color: red !important;
+}
+
+.navbar.dark-mode {
+  background-color: transparent !important;
+  color: white !important;
+}
+
+.profile.dark-mode {
+  background-color: #0f172a !important;
+}
+
+.cards.dark-mode {
+  background-color: rgb(30 41 59) !important;
+  color: white !important;
+  border: 1px solid #64748b4d !important;
+}
+
+.cards.dark-mode table,
+.cards.dark-mode th,
+.cards.dark-mode td {
+  color: white !important;
+}
+
+.cards.dark-mode img {
+  filter: invert(1) brightness(2) !important;
+}
+
+.dark-mode {
+  background-color: #0f172a !important;
+  color: white !important;
+  /* transition: background-color 0.3s linear; */
 }
 
 .user-info {
@@ -213,14 +302,15 @@ input.switch:checked + label.checkbox-label:after {
 
 /* Main Content */
 .main-content {
-  height: 100vh;
+  height: fit-content;
+  transition: background-color 0.3s;
   width: 100%;
-  top: 0;
+  top: 5px;
   left: 0;
 }
 
-.info-stok {
-  flex-wrap: wrap;
+#section-dashboard {
+  width: 100%;
 }
 
 .cards {
@@ -230,6 +320,7 @@ input.switch:checked + label.checkbox-label:after {
 .table > :not(caption) > * > * {
   background-color: transparent !important;
   border-collapse: collapse !important;
+  border: 1px solid rgb(71 85 105);
 }
 /* End Main Content */
 
@@ -251,6 +342,10 @@ input.login {
   outline: none !important;
   box-shadow: none !important;
   background: transparent !important;
+}
+
+canvas {
+  width: fit-content !important;
 }
 /* End Login */
 
@@ -291,22 +386,22 @@ input.login {
     right: -22%;
   }
 
-  .cards {
-    width: 100% !important;
-  }
-
   .container-fluid {
     padding: 0px !important;
   }
 
   .data-stok {
-    flex-direction: column;
+    flex-direction: column !important;
   }
 }
 
 @media (max-width: 480px) {
   html {
     font-size: 60%;
+  }
+
+  .card-login {
+    width: 80% !important;
   }
 
   .main {
@@ -316,6 +411,10 @@ input.login {
 
   .container-fluid {
     padding: 0px !important;
+  }
+
+  .info-stok {
+    flex-direction: column !important;
   }
 
   aside {
@@ -367,8 +466,8 @@ input.login {
     padding: 0 1rem !important;
   }
 
-  .profile {
-    width: 35px !important;
+  #popup {
+    width: 50%;
   }
 
   label.checkbox-label,
@@ -385,10 +484,23 @@ input.login {
   .navbar {
     position: fixed !important;
     z-index: 1;
-    background: white;
+    background-color: white !important;
+    color: #000 !important;
     width: 100%;
     top: 0;
     left: 0;
+  }
+
+  .dropdown {
+    display: block !important;
+  }
+
+  .profile {
+    width: fit-content !important;
+  }
+
+  .logout-profil {
+    display: block !important;
   }
 
   .main-content {
@@ -398,5 +510,10 @@ input.login {
   svg {
     width: 50%;
     height: 50%;
+  }
+
+  canvas {
+    width: 100% !important;
+    height: fit-content !important;
   }
 }
