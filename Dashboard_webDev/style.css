@@ -58,6 +58,7 @@ aside.hide #arrow-button {
   height: 30px;
   cursor: pointer;
   right: -7%;
+  bottom: -0.7rem;
   transition: 0.3s;
   z-index: 1;
 }
@@ -101,6 +102,30 @@ aside a {
   color: var(--bg-primary) !important;
 }
 
+.barangMasuk-aside {
+  background-color: var(--hover) !important;
+}
+
+.barangMasuk-aside svg {
+  fill: var(--bg-primary) !important;
+}
+
+a.barangMasuk-aside .submenu-dropdown {
+  color: var(--bg-primary) !important;
+}
+
+.barangKeluar-aside {
+  background-color: var(--hover) !important;
+}
+
+.barangKeluar-aside svg {
+  fill: var(--bg-primary) !important;
+}
+
+a.barangKeluar-aside .submenu-dropdown {
+  color: var(--bg-primary) !important;
+}
+
 .laporan-aside {
   background-color: var(--hover);
 }
@@ -110,9 +135,22 @@ aside a {
   color: var(--bg-primary);
 }
 
+aside img.logo-image {
+  height: 26px !important;
+}
+
+aside span.logo {
+  left: 3.5rem;
+  top: 2rem;
+}
+
 aside a.menu span {
   left: 3rem;
   top: 8px;
+}
+
+aside.hide span.logo {
+  display: none !important;
 }
 
 aside.hide a.logout {
@@ -128,13 +166,17 @@ aside.hide a.logout span {
   display: none;
 }
 
+aside.hide a.menu .icon-dropdown {
+  margin: auto;
+}
+
+aside.hide a.menu .submenu-dropdown {
+  display: none !important;
+}
+
 a.menu {
   color: var(--icon) !important;
   transition: 0.3s;
-}
-
-aside.hide .kelolastok-dropdown {
-  display: none !important;
 }
 
 a.logout {
@@ -144,6 +186,10 @@ a.logout {
 a.menu:hover {
   color: var(--bg-primary) !important;
   background-color: var(--hover);
+}
+
+a.menu:hover svg.icon-dropdown {
+  fill: black;
 }
 
 a.logout {
@@ -178,6 +224,12 @@ i#hamburger-menu {
 
 .dropdown {
   display: none !important;
+}
+
+.icon-dropdown {
+  margin-right: 1rem;
+  color: white !important;
+  transition: 0.3s;
 }
 
 .dropdown-item:hover {
@@ -426,13 +478,19 @@ canvas {
     border-bottom-left-radius: 10px !important ;
     border-bottom-right-radius: 10px !important;
     position: absolute;
-    top: -50%;
+    top: -100%;
     left: 0;
     z-index: 3;
   }
 
   aside.open-navigation {
     top: 0 !important;
+  }
+
+  aside.open-navigation span.logo {
+    display: block !important;
+    left: 5rem;
+    top: 1rem;
   }
 
   aside span.logo {
@@ -454,11 +512,23 @@ canvas {
 
   aside a.close-btn {
     display: block;
-    margin-bottom: 1.5rem;
   }
 
   aside a.logout {
     display: none !important ;
+  }
+
+  aside .arrow {
+    display: none !important;
+  }
+
+  .kelolastok-dropdown ul {
+    align-items: first baseline !important;
+    margin-left: 2rem;
+  }
+
+  svg.icon-dropdown {
+    width: 15px !important;
   }
 
   .list-group {
@@ -505,11 +575,6 @@ canvas {
 
   .main-content {
     padding-top: 1rem !important;
-  }
-
-  svg {
-    width: 50%;
-    height: 50%;
   }
 
   canvas {
