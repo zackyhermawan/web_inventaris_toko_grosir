@@ -7,7 +7,7 @@ if (!isset($_SESSION['username'])) {
   exit();
 }
 
-if ($_SESSION['role'] !== 'Admin') {
+if ($_SESSION['role'] !== 'admin') {
   echo "<script>
         alert('Anda bukan admin. Anda tidak dapat mengakses halaman ini.');
         window.location.href = 'dashboard.php';
@@ -70,6 +70,7 @@ if (isset($_POST['tambah'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Dashboard - Admin</title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="./asset/logo-img.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
@@ -174,13 +175,13 @@ if (isset($_POST['tambah'])) {
                     <h5 class="card-title m-0">Data Produk</h5>
                     <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal" class="d-inline-block text-decoration-none p-2 bg-primary text-white rounded my-3" >Add Data</a>
                     <div class="table-responsive">
-                      <table class="table table-bordered border-secondary px-2">
+                      <table class="table table-hover table-bordered border-secondary px-2">
                         <thead>
                           <tr>
                             <th style="width: 30px;">No</th>
                             <th>Kode Produk</th>
                             <th>Nama Produk</th>
-                            <th>Jumlah</th>
+                            <th style="width: 200px;">Jumlah Stok Masuk</th>
                             <th>Tanggal</th>
                           </tr>
                         </thead>
@@ -222,26 +223,24 @@ if (isset($_POST['tambah'])) {
   </body>
   <!-- Modal ADD DATA -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-body">
-          <div class="header mb-4 d-flex justify-content-between">
+          <div class="header mb-3 d-flex align-items-center justify-content-between">
             <h1 class="modal-title fs-5" id="exampleModalLabel">Catat barang masuk</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-
+          <!-- FORM ADD DATA -->
           <form method="POST" class="d-flex flex-column rounded-3 justify-content-center">
-              <select class="form-control" name="id_produk">
+              <select class="form-control mb-3" name="id_produk">
                 <?php while ($select = mysqli_fetch_array($result_tambah_stok)):?>
                 <option value="<?= $select['id_produk'] ?>"><?= $select['nama_produk'] ?></option>
                 <?php endwhile ?>
               </select>
-              <br>
               
-              <div>
+              <div class="mb-3">
                 <input type="number" name="tambah_stok" placeholder="Tambah" class="form-control" id="" required />
               </div>
-              <br>
               
             <div class="footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
