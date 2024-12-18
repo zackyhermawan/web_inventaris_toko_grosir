@@ -14,35 +14,58 @@ $admin = $_SESSION['role'] === 'admin';
 if(!isset($_GET['search'])) {
   $sql_laporan = "SELECT 
                   produk.id_produk, 
-                  produk.nama_produk, 
+                  produk.nama_produk,  
                   produk.stok, 
                   produk.harga_beli, 
                   produk.harga_jual,
-                  kategori.nama_kategori, 
+                  kategori.nama_kategori,
                   produk_masuk.jumlah_masuk,
                   produk_masuk.created_at AS tanggal_masuk
                   FROM produk_masuk
-                  INNER JOIN produk ON produk.id_produk = produk_masuk.id_produk
-                  INNER JOIN kategori ON produk.kategori = kategori.id_kategori
+                  LEFT JOIN produk ON produk.id_produk = produk_masuk.id_produk
+                  LEFT JOIN kategori ON produk.kategori = kategori.id_kategori
                   ORDER BY produk_masuk.created_at DESC";
 $result_laporan = mysqli_query($db, $sql_laporan);
 } else {
   $filter_search = $_GET['search'];
   $sql_laporan_search = "SELECT 
-                          produk.id_produk, 
-                          produk.nama_produk, 
-                          produk.stok, 
-                          produk.harga_beli, 
-                          produk.harga_jual,
-                          kategori.nama_kategori, 
-                          produk_masuk.jumlah_masuk,
-                          produk_masuk.created_at AS tanggal_masuk
-                          FROM produk
-                          INNER JOIN produk_masuk ON produk_masuk.id_produk = produk.id_produk
-                          INNER JOIN kategori ON produk.kategori = kategori.id_kategori
-                          WHERE produk.nama_produk LIKE '%$filter_search%' OR MONTH(produk_masuk.created_at) LIKE '%$filter_search%'
-                          ORDER BY produk_masuk.created_at DESC";
+                         produk.id_produk, 
+                         produk.nama_produk, 
+                         produk.stok, 
+                         produk.harga_beli, 
+                         produk.harga_jual,
+                         kategori.nama_kategori, 
+                         produk_masuk.jumlah_masuk,
+                         produk_masuk.created_at AS tanggal_masuk
+                         FROM produk_masuk
+                         INNER JOIN produk ON produk.id_produk = produk_masuk.id_produk
+                         INNER JOIN kategori ON produk.kategori = kategori.id_kategori
+                         WHERE produk.nama_produk LIKE '%$filter_search%'
+                         ORDER BY produk_masuk.created_at DESC";
  $result_laporan = mysqli_query($db, $sql_laporan_search);
+
+}
+
+// FILTER BULAN
+if(isset($_GET['bulan'])) {
+$sql_laporan_bulan = "SELECT 
+                       produk.id_produk, 
+                       produk.nama_produk, 
+                       produk.stok, 
+                       produk.harga_beli, 
+                       produk.harga_jual,
+                       kategori.nama_kategori, 
+                       produk_masuk.jumlah_masuk,
+                       produk_masuk.created_at AS tanggal_masuk
+                       FROM produk_masuk
+                       INNER JOIN produk ON produk.id_produk = produk_masuk.id_produk
+                       INNER JOIN kategori ON produk.kategori = kategori.id_kategori
+                       WHERE MONTH(produk_masuk.created_at) = '$_GET[bulan]'";
+$result_laporan = mysqli_query($db, $sql_laporan_bulan);
+}
+
+if(isset($_GET['reset'])) {
+  header('location: laporanMasuk.php');
 }
 ?>
 
@@ -152,44 +175,40 @@ $result_laporan = mysqli_query($db, $sql_laporan);
           <div class="container-fluid px-5 pt-4 py-5">
             <div class="= d-flex justify-content-between mb-3">
             <h2 class="mb-3">Laporan Barang Masuk</h2>
-
-              <div class="filter d-flex">
-                <form method="GET" class="d-flex" role="search">
-                    <div class="input-group" style="height: 7px">
-                        <input type="text" name="search" value="<?php if (isset($_GET['search'])) {echo $_GET['search'];} ?>" class="search form-control rounded-start-5 border-0" placeholder="Search by name" aria-label="Search" aria-describedby="search-icon">
-                        <span class="search input-group-text rounded-end-5 border-0" id="search-icon">
-                        <button type="submit" class="border-0 btn-search"><i class=" bi bi-search"></i></button>
-                        </span>
-                    </div>
-                </form>
-                <form>
-                    <div class="mb-3">
-                      <div class="d-flex align-items-center justify-content-center">
-                        <select class="form-select ms-2">
-                          <option selected>Pilih Bulan</option>
-                          <option>Januari</option>
-                          <option>Februari</option>
-                          <option>Maret</option>
-                          <option>April</option>
-                          <option>Mei</option>
-                          <option>Juni</option>
-                          <option>Juli</option>
-                          <option>Agustus</option>
-                          <option>September</option>
-                          <option">Oktober</option>
-                          <option">November</option>
-                          <option">Desember</option>
-                        </select>
-                          <button class="border-0 ms-2 rounded" type="submit" name="filter">Filter</button>
-                      </div>
-                    </div>
-                </form>
-              </div>
-
             </div>
+
             <div class="flex-wrap container-fluid">
               <div class="data-stok row">
-                <div class="card pt-5 cards shadow-sm border-0 col-md-12">
+                <div class="card pt-4 cards shadow-sm border-0 col-md-12">
+                <div class="filter mb-3 d-flex justify-content-between">
+                  <form method="GET" class="d-flex" role="search">
+                      <div class="input-group" style="height: 7px">
+                          <input type="text" name="search" value="<?php if (isset($_GET['search'])) {echo $_GET['search'];} ?>" class="bg-white search form-control rounded-start-5 border-0" placeholder="Search by name" aria-label="Search" aria-describedby="search-icon">
+                          <span class="search bg-white input-group-text rounded-end-5 border-0" id="search-icon">
+                          <button type="submit" class="border-0 btn-search bg-white"><i class="bi bi-search"></i></button>
+                          </span>
+                      </div>
+                  </form>
+                  <form method="GET" class="d-flex">
+                    <select name="bulan" class="form-select ms-2">
+                      <option selected>Pilih Bulan</option>
+                      <option value="01">Januari</option>
+                      <option value="02">Februari</option>
+                      <option value="03">Maret</option>
+                      <option value="04">April</option>
+                      <option value="05">Mei</option>
+                      <option value="06">Juni</option>
+                      <option value="07">Juli</option>
+                      <option value="08">Agustus</option>
+                      <option value="09">September</option>
+                      <option value="10">Oktober</option>
+                      <option value="11">November</option>
+                      <option value="12">Desember</option>
+                    </select>
+                    <button class="border-0 ms-2 rounded" type="submit">Filter</button>
+                    <button name="reset" class="border-0 ms-2 rounded">Reset</button>
+                  </form>
+                </div>
                   <div class="overflow-x-auto card-body">
                     <div class="table-responsive">
                     <table class="table table-hover border-secondary px-2">
