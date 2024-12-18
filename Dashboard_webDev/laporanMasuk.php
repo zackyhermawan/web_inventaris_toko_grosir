@@ -164,23 +164,24 @@ $result_laporan = mysqli_query($db, $sql_laporan);
                 </form>
                 <form>
                     <div class="mb-3">
-                        <div class="d-flex align-items-center justify-content-center">
-                            <select class="form-select ms-2" name="bulan">
-                            <option value="" selected>Pilih Bulan</option>
-                            <option>Januari</option>
-                            <option>Februari</option>
-                            <option>Maret</option>
-                            <option>April</option>
-                            <option>Mei</option>
-                            <option>Juni</option>
-                            <option>Juli</option>
-                            <option>Agustus</option>
-                            <option>September</option>
-                            <option>Oktober</option>
-                            <option>November</option>
-                            <option>Desember</option>
-                            </select>
-                        </div>
+                      <div class="d-flex align-items-center justify-content-center">
+                        <select class="form-select ms-2">
+                          <option selected>Pilih Bulan</option>
+                          <option>Januari</option>
+                          <option>Februari</option>
+                          <option>Maret</option>
+                          <option>April</option>
+                          <option>Mei</option>
+                          <option>Juni</option>
+                          <option>Juli</option>
+                          <option>Agustus</option>
+                          <option>September</option>
+                          <option">Oktober</option>
+                          <option">November</option>
+                          <option">Desember</option>
+                        </select>
+                          <button class="border-0 ms-2 rounded" type="submit" name="filter">Filter</button>
+                      </div>
                     </div>
                 </form>
               </div>
