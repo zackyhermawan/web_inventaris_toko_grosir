@@ -45,6 +45,15 @@ if (isset($_POST['submit'])) {
   $sql_produk = "INSERT INTO produk (id_produk, nama_produk, kategori, stok, harga_beli, harga_jual, laba)
                  VALUES ('$kode_produk', '$namaProduk', '$id_kategori', '$stok', '$hargaBeli', '$hargaJual', '$laba')";
   $result_produk = mysqli_query($db, $sql_produk);
+  if ($result_produk) {
+    $sql_masuk = "INSERT INTO produk_masuk (id_produk, jumlah_masuk, created_at) VALUES ('$kode_produk', '$stok', NOW())";
+    $result_masuk = mysqli_query($db, $sql_masuk);
+    // ALERT BERHASIL, BELUM BERFUNGSI
+    header('Location: manageData.php');
+    echo "<script>alert('Produk Berhasil Ditambah')</script>";
+    
+    exit;
+  }
   }
   
 }
