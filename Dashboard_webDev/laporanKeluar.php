@@ -8,50 +8,68 @@ if (!isset($_SESSION['username'])) {
   exit();
 }
 
-$admin = $_SESSION['role'] === 'Admin';
+$admin = $_SESSION['role'] === 'admin';
 
 // SELECT & SEARCH FUNCTION
+
 if(!isset($_GET['search'])) {
   $sql_laporan = "SELECT 
-produk.id_produk, 
-produk.nama_produk,  
-produk.stok, 
-produk.harga_beli, 
-produk.harga_jual,
-(produk.laba*produk_keluar.jumlah_keluar) as laba,
-kategori.nama_kategori,
-produk_masuk.jumlah_masuk,
-produk_masuk.created_at AS tanggal_masuk,
-produk_keluar.jumlah_keluar,
-produk_keluar.created_at AS tanggal_keluar
-FROM produk
-INNER JOIN produk_keluar ON produk_keluar.id_produk = produk.id_produk
-INNER JOIN produk_masuk ON produk_masuk.id_produk = produk.id_produk
-INNER JOIN kategori ON produk.kategori = kategori.id_kategori
-ORDER BY produk_masuk.created_at DESC";
+                  produk.id_produk, 
+                  produk.nama_produk,  
+                  produk.stok, 
+                  produk.harga_beli, 
+                  produk.harga_jual,
+                  (produk.harga_jual - produk.harga_beli) AS laba,
+                  ((produk.harga_jual - produk.harga_beli) * produk_keluar.jumlah_keluar) AS laba_penjualan,
+                  kategori.nama_kategori,
+                  produk_keluar.jumlah_keluar,
+                  produk_keluar.created_at AS tanggal_keluar
+                  FROM produk_keluar
+                  LEFT JOIN produk ON produk.id_produk = produk_keluar.id_produk
+                  LEFT JOIN kategori ON produk.kategori = kategori.id_kategori
+                  ORDER BY produk_keluar.created_at DESC";
 $result_laporan = mysqli_query($db, $sql_laporan);
 } else {
   $filter_search = $_GET['search'];
   $sql_laporan_search = "SELECT 
-  produk.id_produk, 
-  produk.nama_produk, 
-  produk.stok, 
-  produk.harga_beli, 
-  produk.harga_jual,
-  produk.laba,
-  kategori.nama_kategori, 
-  produk_masuk.jumlah_masuk,
-  produk_masuk.created_at AS tanggal_masuk,
-  produk_keluar.jumlah_keluar,
-  produk_keluar.created_at AS tanggal_keluar
-  FROM produk
-  INNER JOIN produk_keluar ON produk_keluar.id_produk = produk.id_produk
-  INNER JOIN produk_masuk ON produk_masuk.id_produk = produk.id_produk
-  INNER JOIN kategori ON produk.kategori = kategori.id_kategori
-  WHERE produk.nama_produk LIKE '%$filter_search%'
-  ORDER BY produk_masuk.created_at DESC";
+                         produk.id_produk, 
+                         produk.nama_produk, 
+                         produk.stok, 
+                         produk.harga_beli, 
+                         produk.harga_jual,
+                         (produk.harga_jual - produk.harga_beli) AS laba,
+                         ((produk.harga_jual - produk.harga_beli)*produk_keluar.jumlah_keluar) AS laba_penjualan,
+                         kategori.nama_kategori, 
+                         produk_keluar.jumlah_keluar,
+                         produk_keluar.created_at AS tanggal_keluar
+                         FROM produk_keluar
+                         INNER JOIN produk ON produk.id_produk = produk_keluar.id_produk
+                         INNER JOIN kategori ON produk.kategori = kategori.id_kategori
+                         WHERE produk.nama_produk LIKE '%$filter_search%' OR MONTH(produk_keluar.created_at) LIKE '%$filter_search%'
+                         ORDER BY produk_keluar.created_at DESC";
  $result_laporan = mysqli_query($db, $sql_laporan_search);
 }
+
+// FILTER DATA BY BULAN
+// if(isset($_GET['filter'])) {
+//   $sql_laporan_bulan = "SELECT 
+//                          produk.id_produk, 
+//                          produk.nama_produk, 
+//                          produk.stok, 
+//                          produk.harga_beli, 
+//                          produk.harga_jual,
+//                          (produk.harga_jual - produk.harga_beli) AS laba,
+//                          ((produk.harga_jual - produk.harga_beli)*produk_keluar.jumlah_keluar) AS laba_penjualan,
+//                          kategori.nama_kategori, 
+//                          produk_keluar.jumlah_keluar,
+//                          produk_keluar.created_at AS tanggal_keluar
+//                          FROM produk_keluar
+//                          INNER JOIN produk ON produk.id_produk = produk_keluar.id_produk
+//                          INNER JOIN kategori ON produk.kategori = kategori.id_kategori
+//                          WHERE MONTH(produk_keluar.created_at) ='%$filter_bulan%'
+//                          ORDER BY produk_keluar.created_at DESC";
+//  $result_laporan = mysqli_query($db, $sql_laporan_bulan);
+// }
 
 
 ?>
@@ -63,6 +81,7 @@ $result_laporan = mysqli_query($db, $sql_laporan);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Dashboard - <?php if($admin) {echo "Admin";} else {echo "User";}?></title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="./asset/logo-img.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
   </head>
@@ -173,23 +192,24 @@ $result_laporan = mysqli_query($db, $sql_laporan);
                 </form>
                 <form>
                     <div class="mb-3">
-                        <div class="d-flex">
-                            <select class="form-select ms-2">
-                                <option selected>Pilih Bulan</option>
-                                <option>Januari</option>
-                                <option>Februari</option>
-                                <option>Maret</option>
-                                <option>April</option>
-                                <option>Mei</option>
-                                <option>Juni</option>
-                                <option>Juli</option>
-                                <option>Agustus</option>
-                                <option>September</option>
-                                <option">Oktober</option>
-                                <option">November</option>
-                                <option">Desember</option>
-                            </select>
-                        </div>
+                      <div class="d-flex align-items-center justify-content-center">
+                        <select class="form-select ms-2">
+                          <option selected>Pilih Bulan</option>
+                          <option>Januari</option>
+                          <option>Februari</option>
+                          <option>Maret</option>
+                          <option>April</option>
+                          <option>Mei</option>
+                          <option>Juni</option>
+                          <option>Juli</option>
+                          <option>Agustus</option>
+                          <option>September</option>
+                          <option">Oktober</option>
+                          <option">November</option>
+                          <option">Desember</option>
+                        </select>
+                          <button class="border-0 ms-2 rounded" type="submit" name="filter">Filter</button>
+                      </div>
                     </div>
                 </form>
             </div>
@@ -200,21 +220,19 @@ $result_laporan = mysqli_query($db, $sql_laporan);
                 <div class="card pt-5 cards shadow-sm border-0 col-md-12">
                   <div class="overflow-x-auto card-body">
                     <div class="table-responsive">
-                    <table class="table border-secondary px-2">
+                    <table id="#example" class="table table-hover border-secondary px-2">
                       <thead>
                         <tr>
                           <th style="width: 30px;">No</th>
                           <th>ID Produk</th>
                           <th>Nama Produk</th>
                           <th>Kategori</th>
-                          <th>Stok</th>
                           <th>Harga Beli</th>
                           <th>Harga Jual</th>
-                          <th>Jumlah Masuk</th>
-                          <th>Tanggal Masuk</th>
+                          <th>Laba per Barang</th>
                           <th>Jumlah Keluar</th>
-                          <th>Tanggal Keluar</th>
                           <th>Laba Penjualan</th>
+                          <th>Tanggal Keluar</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -227,13 +245,11 @@ $result_laporan = mysqli_query($db, $sql_laporan);
                           <td><?=$data['id_produk'];?></td>
                           <td><?=$data['nama_produk'];?></td>
                           <td><?=$data['nama_kategori'];?></td>
-                          <td><?=$data['stok'];?></td>
                           <td>Rp <?=number_format($data['harga_beli'], 2, ",", ".");?></td>
                           <td>Rp <?=number_format($data['harga_jual'], 2, ",", ".");?></td>
-                          <td><?=$data['jumlah_masuk'];?></td>
-                          <td><?=date('d F Y', strtotime($data['tanggal_masuk']));?></td>
-                          <td><?=$data['jumlah_keluar'];?></td>
                           <td>Rp <?=number_format($data['laba'], 2, ",", ".");?></td>
+                          <td><?=$data['jumlah_keluar'];?></td>
+                          <td>Rp <?=number_format($data['laba_penjualan'], 2, ",", ".");?></td>
                           <td><?=date('d F Y', strtotime($data['tanggal_keluar']));?></td>
                         </tr>
                       </tbody>
@@ -255,128 +271,4 @@ $result_laporan = mysqli_query($db, $sql_laporan);
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="script.js"></script>
   </body>
-
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Tambah Produk</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <!-- FORM ADD DATA -->
-          <form method="POST" class="w-100 h-50 p-4 d-flex flex-column rounded-3 justify-content-center">
-            <div class="mb-3">
-              <input type="text" name="nama_produk" placeholder="Nama Produk" class="form-control" id="" aria-describedby="emailHelp" />
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Kategori</label>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="kategori" id="kategori1" value="Elektronik" />
-                <label class="form-check-label" for="kategori1">Elektronik</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="kategori" id="kategori2" value="Pakaian" />
-                <label class="form-check-label" for="kategori2">Pakaian</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="kategori" id="kategori3" value="Makanan" />
-                <label class="form-check-label" for="kategori3">Makanan</label>
-              </div>
-            </div>
-            <div class="mb-3">
-              <input type="number" name="stok_awal" placeholder="Stok Awal" class="form-control" id="" />
-            </div>
-            <div class="mb-3">
-              <input type="number" name="harga_beli" placeholder="Harga Beli" class="form-control" id="" />
-            </div>
-            <div class="mb-3">
-              <input type="number" name="harga_jual" placeholder="Harga Jual" class="form-control" id="" />
-            </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <!-- *Button name=submit nabrak sama type=button -->
-          <button name="submit" class="btn btn-primary">Add changes</button>
-        </div>
-        <!-- *PENEMPATAN FORM (gak bisa di submit jika button tidak didalam tag form) -->
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal Edit -->
-  <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Produk</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form method="POST" class="w-100 h-50 p-4 d-flex flex-column rounded-3 justify-content-center">
-            <div class="mb-3">
-              <input type="email" name="nama_produk" placeholder="Nama Produk" class="form-control" id="" aria-describedby="emailHelp" />
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Kategori</label>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="kategori" id="kategori1" value="Elektronik" />
-                <label class="form-check-label" for="kategori1">Elektronik</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="kategori" id="kategori2" value="Pakaian" />
-                <label class="form-check-label" for="kategori2">Pakaian</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" name="kategori" id="kategori3" value="Makanan" />
-                <label class="form-check-label" for="kategori3">Makanan</label>
-              </div>
-            </div>
-            <div class="mb-3">
-              <input type="number" name="stok_awal" placeholder="Stok Awal" class="form-control" id="" />
-            </div>
-            <div class="mb-3">
-              <input type="number" name="harga_beli" placeholder="Harga Beli" class="form-control" id="" />
-            </div>
-            <div class="mb-3">
-              <input type="number" name="harga_jual" placeholder="Harga Jual" class="form-control" id="" />
-            </div>
-          
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <!-- *name=save nabrak dengan type=button -->
-          <button name="save" class="btn btn-primary">Save changes</button>
-        <!-- *PENEMPATAN FORM (gak bisa di klik jika button tidak didalam tag form) -->  
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal Delete -->
-  <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Hapus Produk</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form class="w-100 h-50 p-4 d-flex flex-column rounded-3 justify-content-center">
-            <p class="fw-semibold">Apakah anda yakin ingin menghapus {nama produk} ini?</p>
-          
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <!-- *name=delete nabrak dengan type=button -->
-          <button name='delete' class='btn btn-danger'>Delete</button>"
-          <!-- *PENEMPATAN FORM (gak bisa di klik jika button tidak didalam tag form) --> 
-        </form>
-        </div>
-      </div>
-    </div>
-  </div>
 </html>
