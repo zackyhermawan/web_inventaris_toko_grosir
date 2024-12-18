@@ -36,7 +36,7 @@ if (isset($_POST['login'])) {
   </head>
   <body>
     <div class="container d-flex flex-column justify-content-center align-items-center vh-100">
-      <div class="card card-login shadow-sm p-4 border-0" style="width: 40%; background-color: #f8fafc">
+      <div class="card cards card-login shadow-sm p-4 border-0" style="width: 40%; background-color: #f8fafc">
         <img src="asset/logo-login.png" class="mx-auto d-block" width=150 alt="">
         <h4 class="text-center ">Inventory Grocery Store</h4>
         <p class="text-center fw-semibold fs-4">Sign in</p>
