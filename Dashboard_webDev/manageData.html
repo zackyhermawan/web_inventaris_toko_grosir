@@ -7,7 +7,7 @@ if (!isset($_SESSION['username'])) {
   exit();
 }
 
-if ($_SESSION['role'] !== 'Admin') {
+if ($_SESSION['role'] !== 'admin') {
   echo "<script>
         alert('Anda bukan admin. Anda tidak dapat mengakses halaman ini.');
         window.location.href = 'dashboard.php';
@@ -45,15 +45,6 @@ if (isset($_POST['submit'])) {
   $sql_produk = "INSERT INTO produk (id_produk, nama_produk, kategori, stok, harga_beli, harga_jual, laba)
                  VALUES ('$kode_produk', '$namaProduk', '$id_kategori', '$stok', '$hargaBeli', '$hargaJual', '$laba')";
   $result_produk = mysqli_query($db, $sql_produk);
-    if ($result_produk) {
-      $sql_masuk = "INSERT INTO produk_masuk (id_produk, jumlah_masuk, created_at) VALUES ('$kode_produk', '$stok', NOW())";
-      $result_masuk = mysqli_query($db, $sql_masuk);
-      // ALERT BERHASIL, BELUM BERFUNGSI
-      header('Location: manageData.php');
-      echo "<script>alert('Produk Berhasil Ditambah')</script>";
-      
-      exit;
-    }
   }
   
 }
@@ -94,6 +85,7 @@ if (isset($_POST['delete'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Dashboard - Admin</title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="./asset/logo-img.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
   </head>
@@ -131,7 +123,7 @@ if (isset($_POST['delete'])) {
               <li class="d-flex align-items-center"><a href="laporanKeluar.php" class="menu p-1 d-flex nav-link text-white rounded"><svg class="icon-dropdown" fill="white" width='20' height='20' xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 505 511.5"><path d="m336.11 39.84-115.38 68.94 135.38 18.4 111.32-69.44-131.32-17.9zm25.45 204.61c73.74 0 133.53 59.78 133.53 133.53 0 73.74-59.79 133.52-133.53 133.52-73.75 0-133.53-59.78-133.53-133.52 0-73.75 59.78-133.53 133.53-133.53zm-50.44 179.72 15.51-78.82 15.73 23.69c33.86-13.59 52.88-36 55.7-70.5 27.82 48.63 10.93 92.22-24.33 117.77l16.05 24.16-78.65-16.3h-.01zM204.83 126.13l-.09 141.71-51.45-35.04-51.46 29.07 6.1-148.91-88.54-12.03v312.98l178.95 23.13c2.52 7.1 5.47 13.99 8.85 20.63L9.3 432.07c-5.17-.2-9.3-4.47-9.3-9.68V89.86c.27-4.05 1.89-6.89 5.72-8.81L182.48.85c1.58-.72 3.52-1.01 5.25-.77l308.18 42.04c5.09.59 8.58 4.77 8.58 9.99v.02L505 280.9c-5.72-8.46-15.57-20.29-19.93-27.77V69.56l-115.81 74.93v59.81a174.846 174.846 0 0 0-19.39.36v-58.82l-145.04-19.71zm-81.52-30.58 112.17-69.44-47.58-6.49L44.24 84.8l79.07 10.75z"/></svg><p class="submenu-dropdown m-0">Laporan Keluar</p></a></li>
         </ul>
           </div> 
-          <a id="logout" href="logout.php" class="logout d-flex align-items-center text-decoration-none text-danger position-absolute mt-4 p-1 mx-2" aria-current="true"
+          <a href="logout.php" class="logout d-flex align-items-center text-decoration-none text-danger position-absolute mt-4 p-1 mx-2" aria-current="true"
             ><i class="bi bi-box-arrow-in-left fs-5 mx-2"></i><span>Logout</span></a
           >
         </div>
@@ -198,7 +190,7 @@ if (isset($_POST['delete'])) {
                   Add Data
                 </a>
                 <div class="table-responsive">
-                  <table class="table table-bordered border-secondary px-2">
+                  <table class="table table-hover table-bordered border-secondary px-2">
                     <thead>
                       <tr>
                         <th style="width: 30px;">No</th>
@@ -241,10 +233,10 @@ if (isset($_POST['delete'])) {
 
                       <!-- Modal Edit -->
                       <div class="modal fade" id="edit<?= $no; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-dialog">
                           <div class="modal-content">
                             <div class="modal-body">
-                              <div class="header mb-3 d-flex justify-content-between">
+                              <div class="header mb-3 d-flex align-items-center justify-content-between">
                                 <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Produk</h1>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                               </div>
@@ -299,7 +291,7 @@ if (isset($_POST['delete'])) {
                                   <input type="number" value="<?= $data['harga_jual']; ?>" name="harga_jual" placeholder="Harga Jual" class="form-control" />
                                 </div>
 
-                                <div class="footer mt-3">
+                                <div class="footer">
                                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                   <button type="submit" name="save" class="btn btn-primary">Save changes</button>
                                 </div>
@@ -311,7 +303,7 @@ if (isset($_POST['delete'])) {
 
                        <!-- Modal Delete -->
                        <div class="modal fade" id="delete<?= $no ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-dialog">
                               <div class="modal-content">
                                 <div class="modal-header">
                                   <h1 class="modal-title fs-5" id="exampleModalLabel">Hapus Produk</h1>
@@ -353,12 +345,13 @@ if (isset($_POST['delete'])) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="script.js"></script>
   </body>
+  <!-- Modal ADD DATA -->
    <!-- Modal ADD DATA -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-body">
-          <div class="header mb-3 d-flex justify-content-between">
+          <div class="header mb-3 d-flex align-items-center justify-content-between">
             <h1 class="modal-title fs-5" id="exampleModalLabel">Tambah Produk</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
@@ -407,9 +400,11 @@ if (isset($_POST['delete'])) {
                 <input type="number" name="harga_jual" placeholder="Harga Jual" class="form-control" id="" required />
               </div>
             <div class="footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button name="submit" class="btn btn-primary">Add changes</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <!-- *Button name=submit nabrak sama type=button -->
+            <button name="submit" class="btn btn-primary">Add changes</button>
             </div>
+          <!-- *PENEMPATAN FORM (gak bisa di submit jika button tidak didalam tag form) -->
           </form>
         </div>
       </div>
