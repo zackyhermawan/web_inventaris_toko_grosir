@@ -8,52 +8,42 @@ if (!isset($_SESSION['username'])) {
   exit();
 }
 
-$admin = $_SESSION['role'] === 'Admin';
+$admin = $_SESSION['role'] === 'admin';
 
 // SELECT & SEARCH FUNCTION
 if(!isset($_GET['search'])) {
   $sql_laporan = "SELECT 
-produk.id_produk, 
-produk.nama_produk,  
-produk.stok, 
-produk.harga_beli, 
-produk.harga_jual,
-(produk.laba*produk_keluar.jumlah_keluar) as laba,
-kategori.nama_kategori,
-produk_masuk.jumlah_masuk,
-produk_masuk.created_at AS tanggal_masuk,
-produk_keluar.jumlah_keluar,
-produk_keluar.created_at AS tanggal_keluar
-FROM produk
-INNER JOIN produk_keluar ON produk_keluar.id_produk = produk.id_produk
-INNER JOIN produk_masuk ON produk_masuk.id_produk = produk.id_produk
-INNER JOIN kategori ON produk.kategori = kategori.id_kategori
-ORDER BY produk_masuk.created_at DESC";
+                  produk.id_produk, 
+                  produk.nama_produk, 
+                  produk.stok, 
+                  produk.harga_beli, 
+                  produk.harga_jual,
+                  kategori.nama_kategori, 
+                  produk_masuk.jumlah_masuk,
+                  produk_masuk.created_at AS tanggal_masuk
+                  FROM produk_masuk
+                  INNER JOIN produk ON produk.id_produk = produk_masuk.id_produk
+                  INNER JOIN kategori ON produk.kategori = kategori.id_kategori
+                  ORDER BY produk_masuk.created_at DESC";
 $result_laporan = mysqli_query($db, $sql_laporan);
 } else {
   $filter_search = $_GET['search'];
   $sql_laporan_search = "SELECT 
-  produk.id_produk, 
-  produk.nama_produk, 
-  produk.stok, 
-  produk.harga_beli, 
-  produk.harga_jual,
-  produk.laba,
-  kategori.nama_kategori, 
-  produk_masuk.jumlah_masuk,
-  produk_masuk.created_at AS tanggal_masuk,
-  produk_keluar.jumlah_keluar,
-  produk_keluar.created_at AS tanggal_keluar
-  FROM produk
-  INNER JOIN produk_keluar ON produk_keluar.id_produk = produk.id_produk
-  INNER JOIN produk_masuk ON produk_masuk.id_produk = produk.id_produk
-  INNER JOIN kategori ON produk.kategori = kategori.id_kategori
-  WHERE produk.nama_produk LIKE '%$filter_search%'
-  ORDER BY produk_masuk.created_at DESC";
+                          produk.id_produk, 
+                          produk.nama_produk, 
+                          produk.stok, 
+                          produk.harga_beli, 
+                          produk.harga_jual,
+                          kategori.nama_kategori, 
+                          produk_masuk.jumlah_masuk,
+                          produk_masuk.created_at AS tanggal_masuk
+                          FROM produk
+                          INNER JOIN produk_masuk ON produk_masuk.id_produk = produk.id_produk
+                          INNER JOIN kategori ON produk.kategori = kategori.id_kategori
+                          WHERE produk.nama_produk LIKE '%$filter_search%' OR MONTH(produk_masuk.created_at) LIKE '%$filter_search%'
+                          ORDER BY produk_masuk.created_at DESC";
  $result_laporan = mysqli_query($db, $sql_laporan_search);
 }
-
-
 ?>
 
 <!DOCTYPE html>
@@ -63,6 +53,7 @@ $result_laporan = mysqli_query($db, $sql_laporan);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Dashboard - <?php if($admin) {echo "Admin";} else {echo "User";}?></title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="./asset/logo-img.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
   </head>
@@ -174,20 +165,20 @@ $result_laporan = mysqli_query($db, $sql_laporan);
                 <form>
                     <div class="mb-3">
                         <div class="d-flex align-items-center justify-content-center">
-                            <select class="form-select ms-2">
-                                <option selected>Pilih Bulan</option>
-                                <option>Januari</option>
-                                <option>Februari</option>
-                                <option>Maret</option>
-                                <option>April</option>
-                                <option>Mei</option>
-                                <option>Juni</option>
-                                <option>Juli</option>
-                                <option>Agustus</option>
-                                <option>September</option>
-                                <option">Oktober</option>
-                                <option">November</option>
-                                <option">Desember</option>
+                            <select class="form-select ms-2" name="bulan">
+                            <option value="" selected>Pilih Bulan</option>
+                            <option>Januari</option>
+                            <option>Februari</option>
+                            <option>Maret</option>
+                            <option>April</option>
+                            <option>Mei</option>
+                            <option>Juni</option>
+                            <option>Juli</option>
+                            <option>Agustus</option>
+                            <option>September</option>
+                            <option>Oktober</option>
+                            <option>November</option>
+                            <option>Desember</option>
                             </select>
                         </div>
                     </div>
@@ -200,7 +191,7 @@ $result_laporan = mysqli_query($db, $sql_laporan);
                 <div class="card pt-5 cards shadow-sm border-0 col-md-12">
                   <div class="overflow-x-auto card-body">
                     <div class="table-responsive">
-                    <table class="table border-secondary px-2">
+                    <table class="table table-hover border-secondary px-2">
                       <thead>
                         <tr>
                           <th style="width: 30px;">No</th>
@@ -210,11 +201,8 @@ $result_laporan = mysqli_query($db, $sql_laporan);
                           <th>Stok</th>
                           <th>Harga Beli</th>
                           <th>Harga Jual</th>
-                          <th>Jumlah Masuk</th>
+                          <th>Jumlah Stok Masuk</th>
                           <th>Tanggal Masuk</th>
-                          <th>Jumlah Keluar</th>
-                          <th>Tanggal Keluar</th>
-                          <th>Laba Penjualan</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -232,9 +220,6 @@ $result_laporan = mysqli_query($db, $sql_laporan);
                           <td>Rp <?=number_format($data['harga_jual'], 2, ",", ".");?></td>
                           <td><?=$data['jumlah_masuk'];?></td>
                           <td><?=date('d F Y', strtotime($data['tanggal_masuk']));?></td>
-                          <td><?=$data['jumlah_keluar'];?></td>
-                          <td>Rp <?=number_format($data['laba'], 2, ",", ".");?></td>
-                          <td><?=date('d F Y', strtotime($data['tanggal_keluar']));?></td>
                         </tr>
                       </tbody>
                       <?php endwhile; ?>
