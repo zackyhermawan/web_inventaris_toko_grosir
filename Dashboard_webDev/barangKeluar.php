@@ -7,7 +7,7 @@ if (!isset($_SESSION['username'])) {
   exit();
 }
 
-if ($_SESSION['role'] !== 'Admin') {
+if ($_SESSION['role'] !== 'admin') {
   echo "<script>
         alert('Anda bukan admin. Anda tidak dapat mengakses halaman ini.');
         window.location.href = 'dashboard.php';
@@ -69,6 +69,7 @@ if (isset($_POST['keluar'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Dashboard - Admin</title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="./asset/logo-img.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
   </head>
@@ -84,7 +85,7 @@ if (isset($_POST['keluar'])) {
         <div class="position-relative">
           <button id="arrow-button" class="arrow position-absolute border-0 shadow-lg d-flex align-items-center justify-content-center rounded-5"><i class="bi bi-arrow-right"></i></button>
         </div>
-          <a href="dashboard.php" class="menu position-relative text-decoration-none mt-4 p-1 mx-2 rounded" aria-current="true"><i class="bi bi-house-fill fs-5 mx-2"></i><span class="position-absolute">Dashboard</span></a>
+        <a href="dashboard.php" class="menu position-relative text-decoration-none mt-4 p-1 mx-2 rounded" aria-current="true"><i class="bi bi-house-fill fs-5 mx-2"></i><span class="position-absolute">Dashboard</span></a>
           <a href="manageData.php" class="menu text-decoration-none mt-4 p-1 mx-2 rounded" aria-current="true"><i class="bi bi-dropbox fs-5 mx-2"></i><span class="position-absolute">Manage Data</span></a>
           <a class="menu kelolastok-aside nav-link position-relative text-decoration-none mt-4 p-1 mx-2 rounded text-white" data-bs-toggle="collapse" href="#kelolaProduk" role="button" aria-expanded="false" aria-controls="kelolaProduk">
           <i class="bi bi-box-seam-fill fs-5 mx-2"></i><span class="position-absolute">Kelola Stok<i class="bi ms-2 bi-caret-down-fill"></i>
@@ -173,13 +174,13 @@ if (isset($_POST['keluar'])) {
                     <h5 class="card-title m-0">Data Produk</h5>
                     <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal" class="d-inline-block text-decoration-none p-2 bg-primary text-white rounded my-3" >Add Data</a>
                     <div class="table-responsive">
-                      <table class="table table-bordered border-secondary px-2">
+                      <table class="table table-hover table-bordered border-secondary px-2">
                         <thead>
                           <tr>
                             <th style="width: 30px;">No</th>
                             <th>Kode Produk</th>
                             <th>Nama Produk</th>
-                            <th>Jumlah</th>
+                            <th style="width: 200px;">Jumlah Stok Terjual</th>
                             <th>Tanggal</th>
                           </tr>
                         </thead>
@@ -219,35 +220,34 @@ if (isset($_POST['keluar'])) {
     <script src="chart.js"></script>
   </body>
   <!-- Modal ADD DATA -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-body">
-            <div class="header mb-4 d-flex justify-content-between">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">Catat Barang Keluar</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <form method="POST" class="d-flex flex-column rounded-3 justify-content-center">
-                <select class="form-control" name="id_produk">
-                  <?php while ($select = mysqli_fetch_array($result_keluar_stok)):?>
-                  <option value="<?= $select['id_produk'] ?>"><?= $select['nama_produk'] ?></option>
-                  <?php endwhile ?>
-                </select>
-                <br>
-                
-                <div>
-                  <input type="number" name="keluar_stok" placeholder="Barang Keluar" class="form-control" id="" required />
-                </div>
-                <br>
-
-                <div class="footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button name="keluar" class="btn btn-primary">Add changes</button>
-                </div>
-            </form>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="header mb-3 d-flex align-items-center justify-content-between">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Catat Barang Keluar</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
+          <!-- FORM ADD DATA -->
+          <form method="POST" class="d-flex flex-column rounded-3 justify-content-center">
+              <select class="form-control mb-3" name="id_produk">
+                <?php while ($select = mysqli_fetch_array($result_keluar_stok)):?>
+                <option value="<?= $select['id_produk'] ?>"><?= $select['nama_produk'] ?></option>
+                <?php endwhile ?>
+              </select>
+              
+              <div class="mb-3">
+                <input type="number" name="keluar_stok" placeholder="Barang Keluar" class="form-control" id="" required />
+              </div>
+              
+            <div class="footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <!-- *Button name=submit nabrak sama type=button -->
+            <button name="keluar" class="btn btn-primary">Add changes</button>
+          </div>
+          <!-- *PENEMPATAN FORM (gak bisa di submit jika button tidak didalam tag form) -->
+        </form>
         </div>
-      </div>
     </div>
+  </div>
 </html>
